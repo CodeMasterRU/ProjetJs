@@ -8,9 +8,9 @@ const scoreTabl = document.querySelector('#score')
 const startButton = document.querySelector('#start-button')
 
 // game constants 
-const POWER_PILL_TIME = 10000; // ms power pill time
+const POWER_PILL_TIME = 10000; // ms
 const GLOBAL_SPEED = 80; // ms
-const gameBoard = GameBoard.createGameBoard(gameGrid, LEVEL)
+const gameBoard = GameBoard.createGameBoard(gameGrid, LEVEL);
 
 //initial setup
 let score = 0;
