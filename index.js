@@ -19,8 +19,13 @@ let gameWin = false;
 let powerPillActive = false;
 let powerPillTimer = null
 
-function startGame (){
+function startGame() {
+    /*New variable */
 
+    var playing = false; // Check if the game is currently being played
+    var startButton; // Representing the button
+
+    /*Initialiser les classes du jeu*/
 }
 
 function gameOver (pacman, grid){
