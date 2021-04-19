@@ -24,8 +24,6 @@ function startGame() {
 
     var playing = false; // Check if the game is currently being played
     var startButton; // Representing the button
-
-    /*Initialiser les classes du jeu*/
 }
 
 function gameOver (pacman, grid){
@@ -33,7 +31,7 @@ function gameOver (pacman, grid){
 }
 
 function checkCollision (pacman, ghosts) {
-
+    var collision = false;
 }
 
 function gameLoop (pacman, ghosts){
