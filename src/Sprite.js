@@ -5,13 +5,13 @@ export default class Sprite extends DisplayObject {
         super(props)
 
         this.image = props.image ?? null
-        this.frame = props.frame ?? null
-        
+        this.frame = props.frame ?? null        
 
         this.speedX = props.speedX ?? 0 // скорость переменщения по умолчанию 0
         this.speedY = props.speedY ?? 0
         this.nextDirection = null
     }
+
     getNextPosition(){
         return{
             x : this.x + this.speedX,
@@ -40,11 +40,8 @@ export default class Sprite extends DisplayObject {
                 this.y,
                 this.width,
                 this.height
-            )
-    
-           
+            )           
         }
         super.draw(context)
     }
-       
 }

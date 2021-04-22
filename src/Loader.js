@@ -10,7 +10,7 @@ export function loadImage(src){
 }
 
 export function loadJSON (src){
-    return fetch(src).then(x => x.json()) // logique to download the JSON
+    return fetch(src).then(x => x.json())
 }
 
 export default {

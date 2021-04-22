@@ -12,11 +12,10 @@ export default class Cinematic extends Sprite {
         this.frameNumber = 0
 
         this.onEnd = null
-    }
-   
+    }   
 
     start(name, param = {}){
-        const animation = this.animations.find(y => y.name === name)
+        const animation = this.animations.find(x => x.name === name)
 
         if (animation && this.animation !== animation) {
             this.animation = animation
@@ -38,6 +37,7 @@ export default class Cinematic extends Sprite {
         this.frameNumber = 0
         this.frame = null
     }
+
     update (delta){
         super.update(delta)
         
@@ -45,7 +45,7 @@ export default class Cinematic extends Sprite {
             this.timer += delta
 
             if (this.timer >= this.cooldown){
-                this.frameNumber = (this.frameNumber + 1) % this.animation.frames.length
+                this.frameNumber = (this.frameNumber+1) % this.animation.frames.length
                 this.frame = this.animation.frames[this.frameNumber] // обновление фрейма
                 this.timer = 0
     

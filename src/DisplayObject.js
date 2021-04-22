@@ -11,6 +11,7 @@ export default class DisplayObject {
     }
 
     update(){}
+    
     draw(context){
         if (this.debug){
             // создает зеленый прямоугольник

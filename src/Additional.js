@@ -1,4 +1,3 @@
-
 export function haveCollision (a,b){// проверяет есть ли столкновения со стенками
     const aPoints = [
         { x: a.x, y: a.y},

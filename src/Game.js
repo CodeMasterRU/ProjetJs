@@ -15,16 +15,20 @@ export default class Game {
         requestAnimationFrame(x => this.render(x))
         
     }
+    
     update () {}
+
     clearCanvas (){
         this.canvas.width = this.canvas.width
     }
+
     drawBackground(){
         this.context.beginPath()
         this.context.rect(0, 0, this.canvas.width, this.canvas.height)
         this.context.fillStyle = this.background
         this.context.fill()
     }
+
     render (timestamp) {
         requestAnimationFrame(x => this.render(x))
 
@@ -37,7 +41,6 @@ export default class Game {
         this.clearCanvas()
         this.drawBackground()
 
-        this.stage.draw(this.context)
-        
+        this.stage.draw(this.context)        
     }
 }
