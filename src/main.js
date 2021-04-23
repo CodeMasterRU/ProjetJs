@@ -216,7 +216,6 @@ export default async function main() {
                         ghost.start(ghost.animation.name)
                     })
                 }, 5000)
-
                 break
             }
         }
