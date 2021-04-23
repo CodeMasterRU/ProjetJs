@@ -63,9 +63,10 @@ export default async function main() {
                 image,
                 x: atlas.position[color].x * scale,
                 y: atlas.position[color].y * scale,
-                width: 13 * scale,
-                height: 13 * scale,
-                animations: atlas[`${color}Ghost`]
+                width: 15 * scale,
+                height: 15 * scale,
+                animations: atlas[`${color}Ghost`],
+                // debug: true
             })
             ghost.start(atlas.position[color].direction) // задает анимацию приведениям
             ghost.nextDirection = atlas.position[color].direction
@@ -107,28 +108,32 @@ export default async function main() {
         }))
 
     // добавление элементов, которые нужно отрисовать
-    game.stage.add(maze)
     foods.forEach(food => game.stage.add(food))
-    game.stage.add(pacman)
+    tablets.forEach(tablet => game.stage.add(tablet))
     ghosts.forEach(ghost => game.stage.add(ghost))
     walls.forEach(wall => game.stage.add(wall))
+    game.stage.add(maze)
+    game.stage.add(pacman)
     game.stage.add(leftPortal)
     game.stage.add(rightPortal)
-    tablets.forEach(tablet => game.stage.add(tablet))
 
+
+    const eated_food = []
+    const eated_ghost = []
 
     game.update = () => {
-        const eated = []
+        foods = foods.filter(food => !eated_food.includes(food)) // оставляет несьеденную еду
         for (const food of foods) {// проверка сьели ли мы еду
             if (haveCollision(pacman, food)) {
-                eated.push(food)
+                eated_food.push(food)
                 game.stage.remove(food) // удаление еды графически
             }
         }
-        foods = foods.filter(food => !eated.includes(food)) // оставляет несьеденную еду
+
         // смена направления движения
         changeDirection(pacman)
         ghosts.forEach(changeDirection)
+
         // обнаружение столкновений приведений со стенками
         for (const ghost of ghosts) {
             if (ghost.play === true) {
@@ -150,16 +155,16 @@ export default async function main() {
                         ghost.nextDirection = getRandom('up', 'down', 'left')
                     }
                 }
-            } else if (ghost.play === false) {
-                return
             }
 
             // обнаружение столконовений пакмана и привидения
             if (pacman.play && ghost.play && haveCollision(pacman, ghost)) {
                 if (ghost.isBlue) { // если голубое приведение
-                    ghost.speedX = 0,
-                        ghost.speedY = 0,
-                        game.stage.remove(ghost)
+                    ghost.play = false
+                    ghost.speedX = 0
+                    ghost.speedY = 0
+                    eated_ghost.push(ghost)
+                    game.stage.remove(ghost)
                 } else { // если нет
                     pacman.play = false
                     pacman.speedX = 0
@@ -179,6 +184,10 @@ export default async function main() {
                 pacman.speedY = 0
             }
         }
+
+        document.getElementById("score").textContent = eated_food.length + (eated_ghost.length * 1000)
+
+
         // обьявление телепортов
         if (haveCollision(pacman, leftPortal)) {
             pacman.x = atlas.rightPortal.x * scale - 10 - pacman.width
