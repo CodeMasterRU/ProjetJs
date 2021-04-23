@@ -112,10 +112,10 @@ export default async function main() {
     // добавление элементов, которые нужно отрисовать
     foods.forEach(food => game.stage.add(food))
     tablets.forEach(tablet => game.stage.add(tablet))
-    ghosts.forEach(ghost => game.stage.add(ghost))
     walls.forEach(wall => game.stage.add(wall))
-    game.stage.add(maze)
     game.stage.add(pacman)
+    ghosts.forEach(ghost => game.stage.add(ghost))
+    game.stage.add(maze)
     game.stage.add(leftPortal)
     game.stage.add(rightPortal)
 
@@ -206,7 +206,7 @@ export default async function main() {
 
                 ghosts.forEach(ghost => {
                     ghost.originalAnimations = ghost.animations
-                    ghost.animations = atlas.blueGhost
+                    ghost.animations = sprite.blueGhost
                     ghost.isBlue = true
                     ghost.start(ghost.animation.name)
                 })
