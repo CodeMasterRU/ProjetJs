@@ -5,7 +5,6 @@ export function loadImage(src){
         image.src = src 
         image.onload = () => resolve(image)
         image.onerror = e => reject(e)
-
     })
 }
 

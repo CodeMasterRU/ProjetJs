@@ -16,6 +16,7 @@ export default async function main() {
 
     const image = await loadImage('/sets/spritesheet.png')
     const atlas = await loadJSON('/sets/atlas.json')
+    const sprite = await loadJSON('/sets/sprites.json')
 
     const pacman = new Cinematic({
         image,
@@ -23,7 +24,7 @@ export default async function main() {
         y: atlas.position.pacman.y * scale,
         width: 15 * scale,
         height: 15 * scale,
-        animations: atlas.pacman,
+        animations: sprite.pacman,
         speedX: 2,
         // debug: true
     })
@@ -53,9 +54,10 @@ export default async function main() {
         // передает изображение еды
         .map(food => new Sprite({
             image,
-            frame: atlas.food,
+            frame: sprite.food,
             ...food, // передает координаты food из json
         }))
+
     // приведения
     const ghosts = ['red', 'pink', 'turquoise', 'banana']
         .map(color => {
@@ -65,7 +67,7 @@ export default async function main() {
                 y: atlas.position[color].y * scale,
                 width: 15 * scale,
                 height: 15 * scale,
-                animations: atlas[`${color}Ghost`],
+                animations: sprite[`${color}Ghost`],
                 // debug: true
             })
             ghost.start(atlas.position[color].direction) // задает анимацию приведениям
@@ -100,11 +102,11 @@ export default async function main() {
     const tablets = atlas.position.tablets
         .map(tablet => new Sprite({
             image,
-            frame: atlas.tablet,
             x: tablet.x * scale,
             y: tablet.y * scale,
             width: tablet.width * scale,
             height: tablet.height * scale,
+            frame: sprite.tablet,
         }))
 
     // добавление элементов, которые нужно отрисовать
