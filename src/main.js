@@ -18,6 +18,9 @@ export default async function main() {
     const atlas = await loadJSON('/sets/atlas.json')
     const sprite = await loadJSON('/sets/sprites.json')
 
+    var intro_audio = new Audio('/sets/intro.ogg')
+    intro_audio.play()
+
     const pacman = new Cinematic({
         image,
         x: atlas.position.pacman.x * scale,
@@ -25,7 +28,7 @@ export default async function main() {
         width: 15 * scale,
         height: 15 * scale,
         animations: sprite.pacman,
-        speedX: 2,
+        speedX: 1.5,
         // debug: true
     })
     pacman.start('right')
@@ -127,6 +130,8 @@ export default async function main() {
         foods = foods.filter(food => !eated_food.includes(food)) // оставляет несьеденную еду
         for (const food of foods) {// проверка сьели ли мы еду
             if (haveCollision(pacman, food)) {
+                var eat_food = new Audio('/sets/eat-food.ogg')
+                eat_food.play()
                 eated_food.push(food)
                 game.stage.remove(food) // удаление еды графически
             }
@@ -162,12 +167,15 @@ export default async function main() {
             // обнаружение столконовений пакмана и привидения
             if (pacman.play && ghost.play && haveCollision(pacman, ghost)) {
                 if (ghost.isBlue) { // если голубое приведение
+                    new Audio('/sets/eat-ghost.ogg').play()
                     ghost.play = false
                     ghost.speedX = 0
                     ghost.speedY = 0
                     eated_ghost.push(ghost)
                     game.stage.remove(ghost)
                 } else { // если нет
+                    new Audio('/sets/death.ogg').play()
+                    intro_audio.pause()
                     pacman.play = false
                     pacman.speedX = 0
                     pacman.speedY = 0
@@ -201,6 +209,7 @@ export default async function main() {
         for (let i = 0; i < tablets.length; i++) {
             const tablet = tablets[i]
             if (haveCollision(pacman, tablet)) {
+                new Audio('/sets/ghost-noises.ogg').play()
                 tablets.splice(i, 1)
                 game.stage.remove(tablet)
 
@@ -264,7 +273,7 @@ export default async function main() {
             if (!getWallCollision(sprite)) {
                 sprite.nextDirection = null
                 sprite.speedX = 0
-                sprite.speedY = -2
+                sprite.speedY = -1.5
                 sprite.start('up')
             }
             sprite.y += 10
@@ -274,7 +283,7 @@ export default async function main() {
             if (!getWallCollision(sprite)) {
                 sprite.nextDirection = null
                 sprite.speedX = 0
-                sprite.speedY = 2
+                sprite.speedY = 1.5
                 sprite.start('down')
             }
             sprite.y -= 10
@@ -283,7 +292,7 @@ export default async function main() {
             sprite.x -= 10
             if (!getWallCollision(sprite)) {
                 sprite.nextDirection = null
-                sprite.speedX = -2
+                sprite.speedX = -1.5
                 sprite.speedY = 0
                 sprite.start('left')
             }
@@ -293,7 +302,7 @@ export default async function main() {
             sprite.x += 10
             if (!getWallCollision(sprite)) {
                 sprite.nextDirection = null
-                sprite.speedX = 2
+                sprite.speedX = 1.5
                 sprite.speedY = 0
                 sprite.start('right')
             }
