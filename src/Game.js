@@ -1,8 +1,8 @@
 import Group from "./Group.js"
-
+// creation the canvas and animation the frames
 export default class Game {
     constructor (props = {}){
-        this.canvas = document.createElement('canvas')
+        this.canvas = document.createElement('canvas') 
         this.context = this.canvas.getContext('2d')
         this.stage = new Group
 

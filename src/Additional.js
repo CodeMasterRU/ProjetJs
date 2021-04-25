@@ -1,4 +1,4 @@
-export function haveCollision (a,b){// проверяет есть ли столкновения со стенками
+export function haveCollision (a,b){// check if there are collisions with walls
     const aPoints = [
         { x: a.x, y: a.y},
         { x: a.x + a.width, y: a.y},
@@ -23,7 +23,7 @@ export function haveCollision (a,b){// проверяет есть ли стол
     }
     return false 
 }
-export function getRandom (...array){ // принимает весь массив, и возращает random элемент array этого массива
+export function getRandom (...array){ // takes an entire array, and returns a random element array of entire array
     const index = Math.floor(Math.random() * array.length)
     return array[index]
 }

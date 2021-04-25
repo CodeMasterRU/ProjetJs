@@ -7,7 +7,7 @@ export default class Sprite extends DisplayObject {
         this.image = props.image ?? null
         this.frame = props.frame ?? null        
 
-        this.speedX = props.speedX ?? 0 // скорость переменщения по умолчанию 0
+        this.speedX = props.speedX ?? 0 //default speed speed 0
         this.speedY = props.speedY ?? 0
         this.nextDirection = null
     }

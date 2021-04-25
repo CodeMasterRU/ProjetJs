@@ -5,22 +5,22 @@ import Sprite from './Sprite.js'
 import { getRandom, haveCollision } from './Additional.js'
 import DisplayObject from './DisplayObject.js'
 
-const scale = 2.5                       // позволяет менять масштаб
+const scale = 2.5 // allons to change the scale
 
 export default async function main() {
-    const game = new Game({
+    const game = new Game({ // creation the field of play
         background: 'black'
     })
 
     document.body.append(game.canvas)
 
-    const image = await loadImage('/sets/spritesheet.png')
-    const atlas = await loadJSON('/sets/atlas.json')
+    const image = await loadImage('/sets/spritesheet.png') // read the contents of image file
+    const atlas = await loadJSON('/sets/atlas.json') // read the contents of JSON file
     const sprite = await loadJSON('/sets/sprites.json')
-
-    var intro_audio = new Audio('/sets/intro.ogg')
-    intro_audio.play()
-
+    // creation the audio
+    const introAudio = new Audio('/sets/intro.ogg')
+    introAudio.play()
+    // declaration the pacman as a cinematic
     const pacman = new Cinematic({
         image,
         x: atlas.position.pacman.x * scale,
@@ -32,7 +32,7 @@ export default async function main() {
         // debug: true
     })
     pacman.start('right')
-
+    // declaration the maze
     const maze = new Sprite({
         image,
         x: 0,
@@ -44,9 +44,9 @@ export default async function main() {
     game.canvas.width = maze.width
     game.canvas.height = maze.height
 
-    // отрисовка еды
+    // drawing food
     let foods = atlas.maze.foods
-        // возращает отмаштабируемые размеры еды
+        //returns scalable food sizes
         .map(food => ({
             ...food,
             x: food.x * scale,
@@ -54,14 +54,14 @@ export default async function main() {
             width: food.width * scale,
             height: food.height * scale,
         }))
-        // передает изображение еды
+        // conveys an image and frames the food 
         .map(food => new Sprite({
             image,
             frame: sprite.food,
-            ...food, // передает координаты food из json
+            ...food, // passes coordinates of food items from json
         }))
 
-    // приведения
+    // ghosts
     const ghosts = ['red', 'pink', 'turquoise', 'banana']
         .map(color => {
             const ghost = new Cinematic({
@@ -73,13 +73,13 @@ export default async function main() {
                 animations: sprite[`${color}Ghost`],
                 // debug: true
             })
-            ghost.start(atlas.position[color].direction) // задает анимацию приведениям
+            ghost.start(atlas.position[color].direction) // sets the animation of ghosts
             ghost.nextDirection = atlas.position[color].direction
             ghost.isBlue = false
             return ghost
         })
 
-    // создание стен
+    // creation the walls
     const walls = atlas.maze.walls.map(wall => new DisplayObject({
         x: wall.x * scale,
         y: wall.y * scale,
@@ -88,7 +88,7 @@ export default async function main() {
         // debug : true
     }))
 
-    // обьявление телепортов 
+    // creation the portals 
     const leftPortal = new DisplayObject({
         x: atlas.leftPortal.x * scale,
         y: atlas.leftPortal.y * scale,
@@ -101,7 +101,7 @@ export default async function main() {
         width: atlas.rightPortal.width * scale,
         height: atlas.rightPortal.height * scale,
     })
-
+    // creation the tablets
     const tablets = atlas.position.tablets
         .map(tablet => new Sprite({
             image,
@@ -112,7 +112,7 @@ export default async function main() {
             frame: sprite.tablet,
         }))
 
-    // добавление элементов, которые нужно отрисовать
+    // adding the elements to draw
     foods.forEach(food => game.stage.add(food))
     tablets.forEach(tablet => game.stage.add(tablet))
     walls.forEach(wall => game.stage.add(wall))
@@ -127,21 +127,21 @@ export default async function main() {
     const eated_ghost = []
 
     game.update = () => {
-        foods = foods.filter(food => !eated_food.includes(food)) // оставляет несьеденную еду
-        for (const food of foods) {// проверка сьели ли мы еду
+        foods = foods.filter(food => !eated_food.includes(food)) // leaves uneaten food
+        for (const food of foods) {// checking if we have eaten food
             if (haveCollision(pacman, food)) {
                 var eat_food = new Audio('/sets/eat-food.ogg')
                 eat_food.play()
                 eated_food.push(food)
-                game.stage.remove(food) // удаление еды графически
+                game.stage.remove(food) // removing food graphically
             }
         }
 
-        // смена направления движения
+        //change of direction of movement
         changeDirection(pacman)
         ghosts.forEach(changeDirection)
 
-        // обнаружение столкновений приведений со стенками
+        // collision detection of ghosts with walls
         for (const ghost of ghosts) {
             if (ghost.play === true) {
                 if (getWallCollision(ghost.getNextPosition())) {
@@ -164,22 +164,22 @@ export default async function main() {
                 }
             }
 
-            // обнаружение столконовений пакмана и привидения
+            // pacman and ghost collision detection
             if (pacman.play && ghost.play && haveCollision(pacman, ghost)) {
-                if (ghost.isBlue) { // если голубое приведение
+                if (ghost.isBlue) { //if blue ghost
                     new Audio('/sets/eat-ghost.ogg').play()
                     ghost.play = false
                     ghost.speedX = 0
                     ghost.speedY = 0
                     eated_ghost.push(ghost)
                     game.stage.remove(ghost)
-                } else { // если нет
+                } else { // if no
                     new Audio('/sets/death.ogg').play()
-                    intro_audio.pause()
+                    introAudio.pause()
                     pacman.play = false
                     pacman.speedX = 0
                     pacman.speedY = 0
-                    pacman.start('die', {                   // вызов метода конца игры
+                    pacman.start('die', { // call the end game method
                         onEnd() {
                             game.stage.remove(pacman)
                         }
@@ -187,25 +187,25 @@ export default async function main() {
                 }
             }
 
-            // обнаружение столконовений пакмана со стеной
+            // pacman wall collision detection
             if (getWallCollision(pacman.getNextPosition())) {
-                pacman.start(`wait${pacman.animation.name}`) // для остановки когда ударяется о стенку
+                pacman.start(`wait${pacman.animation.name}`) //to stop when hitting a wall
                 pacman.speedX = 0
                 pacman.speedY = 0
             }
         }
-
+        // the score
         document.getElementById("score").textContent = eated_food.length + (eated_ghost.length * 1000)
 
 
-        // обьявление телепортов
+        // announcement of teleports
         if (haveCollision(pacman, leftPortal)) {
             pacman.x = atlas.rightPortal.x * scale - 10 - pacman.width
         }
         if (haveCollision(pacman, rightPortal)) {
             pacman.x = atlas.leftPortal.x * scale + 10 + pacman.width
         }
-        // обнаружение столкновения пакмана с таблеткой
+        // pacman pill collision detection
         for (let i = 0; i < tablets.length; i++) {
             const tablet = tablets[i]
             if (haveCollision(pacman, tablet)) {
@@ -233,7 +233,7 @@ export default async function main() {
     }
 
 
-    // управление pacman
+    // pacman control
     document.addEventListener('keydown', event => {
         if (pacman.play === true) {
             if (event.key === "ArrowLeft") {
@@ -254,7 +254,7 @@ export default async function main() {
         }
     })
 
-    // обнаружение прикосновений обьекта со стеной
+    //detection of touches of an object with a wall
     function getWallCollision(obj) {
         for (const wall of walls) {
             if (haveCollision(wall, obj)) {
@@ -263,7 +263,7 @@ export default async function main() {
         }
         return null
     }
-    // движения pacman
+    // pacman movement
     function changeDirection(sprite) {
         if (!sprite.nextDirection) {
             return
