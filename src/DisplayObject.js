@@ -1,4 +1,4 @@
-export default class DisplayObject {
+export default class DisplayObject { //everything that can be drawn without sprite 
     constructor (props = {}){
         this.visible = props.visible ?? true 
         this.debug = props.debug ?? false // need to draw the frames

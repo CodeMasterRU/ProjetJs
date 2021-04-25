@@ -11,24 +11,16 @@ export default async function main() {
     const game = new Game({ // creation the field of play
         background: 'black'
     })
-    
+
     document.body.append(game.canvas)
-    
-    const image = await loadImage('/sets/spritesheet.png') // read the contents of image file
-    const atlas = await loadJSON('/sets/atlas.json') // read the contents of JSON file
-    const sprite = await loadJSON('/sets/sprites.json')
-    
-    var intro_audio = new Audio('/sets/intro.ogg')
-    var death = new Audio('/sets/death.ogg')
-    var eat_food = new Audio('/sets/eat-food.ogg')
-    var eat_ghost = new Audio('/sets/eat-ghost.ogg')
-    var ghost_noises = new Audio('/sets/ghost-noises.ogg')
+
+    const image = await loadImage('./sets/spritesheet.png') // read the contents of image file
+    const atlas = await loadJSON('./sets/atlas.json') // read the contents of JSON file
+    const sprite = await loadJSON('./sets/sprites.json')
     // creation the audio
-    
-    intro_audio.play()
-
+    const introAudio = new Audio('./sets/intro.ogg')
+    introAudio.play()
     // declaration the pacman as a cinematic
-
     const pacman = new Cinematic({
         image,
         x: atlas.position.pacman.x * scale,
@@ -36,6 +28,7 @@ export default async function main() {
         width: 15 * scale,
         height: 15 * scale,
         animations: sprite.pacman,
+        speedX: 1.5,
         // debug: true
     })
     pacman.start('right')
@@ -137,6 +130,7 @@ export default async function main() {
         foods = foods.filter(food => !eated_food.includes(food)) // leaves uneaten food
         for (const food of foods) {// checking if we have eaten food
             if (haveCollision(pacman, food)) {
+                var eat_food = new Audio('/sets/eat-food.ogg')
                 eat_food.play()
                 eated_food.push(food)
                 game.stage.remove(food) // removing food graphically
@@ -173,16 +167,15 @@ export default async function main() {
             // pacman and ghost collision detection
             if (pacman.play && ghost.play && haveCollision(pacman, ghost)) {
                 if (ghost.isBlue) { //if blue ghost
-                    eat_ghost.play()
+                    new Audio('/sets/eat-ghost.ogg').play()
                     ghost.play = false
                     ghost.speedX = 0
                     ghost.speedY = 0
                     eated_ghost.push(ghost)
                     game.stage.remove(ghost)
-
                 } else { // if no
-                    death.play()
-                    intro_audio.pause()
+                    new Audio('/sets/death.ogg').play()
+                    introAudio.pause()
                     pacman.play = false
                     pacman.speedX = 0
                     pacman.speedY = 0
@@ -216,7 +209,7 @@ export default async function main() {
         for (let i = 0; i < tablets.length; i++) {
             const tablet = tablets[i]
             if (haveCollision(pacman, tablet)) {
-                ghost_noises.play()
+                new Audio('/sets/ghost-noises.ogg').play()
                 tablets.splice(i, 1)
                 game.stage.remove(tablet)
 

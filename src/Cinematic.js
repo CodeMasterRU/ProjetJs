@@ -1,6 +1,6 @@
 import Sprite from "./Sprite.js"
  
-export default class Cinematic extends Sprite {
+export default class Cinematic extends Sprite { // animated sprite
     play = true
     constructor (props = {}){
         super(props)

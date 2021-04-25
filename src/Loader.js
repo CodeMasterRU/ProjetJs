@@ -1,4 +1,4 @@
-export function loadImage(src){
+export function loadImage(src){ // declaration of functions that load image and json file
     return new Promise((resolve, reject) => {
         const image = new Image 
 

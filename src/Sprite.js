@@ -1,6 +1,6 @@
 import DisplayObject from './DisplayObject.js'
 
-export default class Sprite extends DisplayObject {
+export default class Sprite extends DisplayObject { // drawing a fragment of an image
     constructor (props = {}){
         super(props)
 
