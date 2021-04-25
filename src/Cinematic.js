@@ -19,7 +19,7 @@ export default class Cinematic extends Sprite {
 
         if (animation && this.animation !== animation) {
             this.animation = animation
-            this.cooldown = this.animation.duration / this.animation.frames.length
+            this.cooldown = (this.animation.duration/2) / this.animation.frames.length
             this.timer = 0
             this.frameNumber = 0
             this.frame = this.animation.frames[0]

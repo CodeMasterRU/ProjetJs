@@ -11,14 +11,19 @@ export default async function main() {
     const game = new Game({
         background: 'black'
     })
-
+    
     document.body.append(game.canvas)
-
+    
     const image = await loadImage('/sets/spritesheet.png')
     const atlas = await loadJSON('/sets/atlas.json')
     const sprite = await loadJSON('/sets/sprites.json')
-
+    
     var intro_audio = new Audio('/sets/intro.ogg')
+    var death = new Audio('/sets/death.ogg')
+    var eat_food = new Audio('/sets/eat-food.ogg')
+    var eat_ghost = new Audio('/sets/eat-ghost.ogg')
+    var ghost_noises = new Audio('/sets/ghost-noises.ogg')
+    
     intro_audio.play()
 
     const pacman = new Cinematic({
@@ -28,7 +33,6 @@ export default async function main() {
         width: 15 * scale,
         height: 15 * scale,
         animations: sprite.pacman,
-        speedX: 1.5,
         // debug: true
     })
     pacman.start('right')
@@ -130,7 +134,6 @@ export default async function main() {
         foods = foods.filter(food => !eated_food.includes(food)) // оставляет несьеденную еду
         for (const food of foods) {// проверка сьели ли мы еду
             if (haveCollision(pacman, food)) {
-                var eat_food = new Audio('/sets/eat-food.ogg')
                 eat_food.play()
                 eated_food.push(food)
                 game.stage.remove(food) // удаление еды графически
@@ -167,14 +170,14 @@ export default async function main() {
             // обнаружение столконовений пакмана и привидения
             if (pacman.play && ghost.play && haveCollision(pacman, ghost)) {
                 if (ghost.isBlue) { // если голубое приведение
-                    new Audio('/sets/eat-ghost.ogg').play()
+                    eat_ghost.play()
                     ghost.play = false
                     ghost.speedX = 0
                     ghost.speedY = 0
                     eated_ghost.push(ghost)
                     game.stage.remove(ghost)
                 } else { // если нет
-                    new Audio('/sets/death.ogg').play()
+                    death.play()
                     intro_audio.pause()
                     pacman.play = false
                     pacman.speedX = 0
@@ -209,7 +212,7 @@ export default async function main() {
         for (let i = 0; i < tablets.length; i++) {
             const tablet = tablets[i]
             if (haveCollision(pacman, tablet)) {
-                new Audio('/sets/ghost-noises.ogg').play()
+                ghost_noises.play()
                 tablets.splice(i, 1)
                 game.stage.remove(tablet)
 
