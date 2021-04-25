@@ -1,7 +1,7 @@
 export default class DisplayObject {
     constructor (props = {}){
         this.visible = props.visible ?? true 
-        this.debug = props.debug ?? false // нужен для отрисовки фрейма
+        this.debug = props.debug ?? false // need to draw the frames
 
         this.x = props.x ?? 0
         this.y = props.y ?? 0
@@ -12,20 +12,20 @@ export default class DisplayObject {
 
     update(){}
     
-    draw(context){
+    draw(context){ // its necessary to stroking elements for the debugger
         if (this.debug){
-            // создает зеленый прямоугольник
+            // creates a green rectangle
             context.beginPath()
             context.rect(this.x, this.y, this.width, this.height)
             context.fillstyle = 'rgba(0, 225, 0, 0.3)'
             context.fill()
-            // ввод его в код
+            // inputting it in the canvas
             context.beginPath()
             context.rect(this.x, this.y, this.width, this.height)
             context.lineWidth = 3
             context.strokeStyle = 'green'
             context.stroke()
-            // создаем прямую линию
+            // creates a straight diagonal
             context.beginPath()
             context.moveTo(this.x, this.y)
             context.lineTo(this.x + this.width,this.y + this.height)

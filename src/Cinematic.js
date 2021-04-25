@@ -46,7 +46,7 @@ export default class Cinematic extends Sprite {
 
             if (this.timer >= this.cooldown){
                 this.frameNumber = (this.frameNumber+1) % this.animation.frames.length
-                this.frame = this.animation.frames[this.frameNumber] // обновление фрейма
+                this.frame = this.animation.frames[this.frameNumber] // update frames
                 this.timer = 0
     
                 if (this.frameNumber === 0 && this.onEnd){
